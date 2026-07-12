@@ -30,20 +30,23 @@ def get_flow():
     return flow
 
 # Check if we're returning from Google's login
+
 query_params = st.query_params
 
 if "code" in query_params and "credentials" not in st.session_state:
-    flow = get_flow()
-    flow.fetch_token(code=query_params["code"])
-    st.session_state["credentials"] = flow.credentials
-    st.query_params.clear()
-    st.rerun()
+    if "flow" in st.session_state:
+        flow = st.session_state["flow"]
+        flow.fetch_token(code=query_params["code"])
+        st.session_state["credentials"] = flow.credentials
+        st.query_params.clear()
+        st.rerun()
 
 # Login button
 st.markdown("---")
 if "credentials" not in st.session_state:
     flow = get_flow()
     auth_url, _ = flow.authorization_url(prompt='consent')
+    st.session_state["flow"] = flow
     st.markdown(f"[🔗 Connect YouTube Account]({auth_url})")
 else:
     st.success("✅ YouTube Connected!")
