@@ -120,95 +120,128 @@ if "credentials" in st.session_state:
 st.markdown("""
     <style>
     .stApp {
-        background-color: #121212;
+        background-color: #0a0a0a;
         color: #ffffff;
-        font-family: -apple-system, "Circular", "Helvetica Neue", sans-serif;
+        font-family: -apple-system, "Helvetica Neue", sans-serif;
     }
-    .big-title {
-        font-size: 32px;
-        font-weight: 700;
-        color: #ffffff;
-        margin-bottom: 2px;
-        letter-spacing: -0.5px;
+    
+    .hero-section {
+        background: linear-gradient(180deg, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.9) 100%), 
+                    linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+        padding: 60px 24px 40px 24px;
+        border-radius: 0px;
+        margin: -16px -16px 24px -16px;
     }
-    .subtitle {
-        color: #b3b3b3;
-        font-size: 14px;
-        margin-bottom: 28px;
-    }
-    .song-card {
-        background: #181818;
-        padding: 14px 16px;
-        border-radius: 8px;
-        margin-bottom: 8px;
-        border: none;
-        transition: background 0.2s ease;
-    }
-    .song-card:hover {
-        background: #282828;
-    }
-    .song-title {
-        font-size: 16px;
-        font-weight: 700;
-        color: #ffffff;
-    }
-    .song-artist {
-        font-size: 13px;
-        color: #b3b3b3;
-        margin-top: 2px;
-    }
-    .song-meta {
-        font-size: 11px;
-        color: #1ed760;
-        margin-top: 6px;
-        font-weight: 700;
-        text-transform: uppercase;
-        letter-spacing: 0.8px;
-    }
-    .mood-badge {
+    
+    .hero-label {
         display: inline-block;
-        padding: 8px 20px;
-        border-radius: 500px;
-        background: #1ed760;
-        color: #000000;
+        background: #000000;
+        padding: 6px 14px;
+        font-size: 11px;
         font-weight: 700;
-        font-size: 13px;
-        margin-top: 10px;
-        text-transform: uppercase;
-        letter-spacing: 0.8px;
-    }
-    div.stButton > button {
-        background: #1ed760;
-        color: #000000;
-        font-weight: 700;
-        border-radius: 500px;
-        border: none;
-        padding: 12px 32px;
-        font-size: 14px;
         text-transform: uppercase;
         letter-spacing: 1px;
-        transition: transform 0.15s ease, background 0.15s ease;
+        margin-bottom: 10px;
     }
-    div.stButton > button:hover {
-        background: #1fdf64;
-        transform: scale(1.02);
+    
+    .hero-title {
+        font-size: 36px;
+        font-weight: 800;
+        color: #ffffff;
+        line-height: 1.1;
+        letter-spacing: -0.5px;
     }
-    div.stButton > button:active {
-        transform: scale(0.98);
+    
+    .section-label {
+        font-size: 12px;
+        font-weight: 700;
+        color: #6a6a6a;
+        text-transform: uppercase;
+        letter-spacing: 1.5px;
+        margin: 32px 0 16px 0;
     }
-    .stSelectbox > div > div {
-        background-color: #282828;
-        border-radius: 4px;
-        border: none;
+    
+    .genre-pill {
+        display: inline-block;
+        background: transparent;
+        border: 1px solid #333333;
+        padding: 8px 18px;
+        border-radius: 500px;
+        font-size: 13px;
+        font-weight: 600;
+        color: #ffffff;
+        margin: 4px 6px 4px 0;
     }
-    .stSlider {
+    
+    .list-row {
+        display: flex;
+        align-items: center;
+        padding: 12px 0;
+        border-bottom: 1px solid #1a1a1a;
+    }
+    
+    .list-title {
+        font-size: 15px;
+        font-weight: 700;
+        color: #ffffff;
+    }
+    
+    .list-subtitle {
+        font-size: 13px;
+        color: #7a7a7a;
+        margin-top: 2px;
+    }
+    
+    .list-score {
         color: #1ed760;
+        font-size: 13px;
+        font-weight: 700;
+        margin-left: auto;
     }
-    hr {
-        border-color: #282828;
+    
+    div.stButton > button {
+        background: #ffffff;
+        color: #000000;
+        font-weight: 700;
+        border-radius: 500px;
+        border: none;
+        padding: 14px 0px;
+        font-size: 14px;
+        width: 100%;
+        text-transform: none;
+    }
+    
+    div.stButton > button:hover {
+        background: #e0e0e0;
+    }
+    
+    .stSelectbox > div > div {
+        background-color: #1a1a1a;
+        border: 1px solid #2a2a2a;
+        border-radius: 6px;
     }
     </style>
 """, unsafe_allow_html=True)
+
+# Hero section
+st.markdown("""
+    <div class="hero-section">
+        <div class="hero-label">MOOD ENGINE</div>
+        <div class="hero-title">moodmix</div>
+    </div>
+""", unsafe_allow_html=True)
+
+for _, row in top_songs.iterrows():
+    st.markdown(f"""
+        <div class="list-row">
+            <div style="flex: 1;">
+                <div class="list-title">{row['Track']}</div>
+                <div class="list-subtitle">{row['Artist']} · {row['Genre']}</div>
+            </div>
+            <div class="list-score">🔥 {row['Popularity']}</div>
+        </div>
+    """, unsafe_allow_html=True)
+
 # ---------- LOAD DATA ----------
 df = pickle.load(open('songs.pkl', 'rb'))
 
