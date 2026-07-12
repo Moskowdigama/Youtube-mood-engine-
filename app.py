@@ -4,8 +4,50 @@ import pickle
 import pandas as pd
 import emoji
 from collections import Counter
-
+from google_auth_oauthlib.flow import Flow
+import googleapiclient.discovery
 st.set_page_config(page_title="moodmix 🎧", page_icon="🎧", layout="centered")
+
+
+# OAuth Setup
+SCOPES = ['https://www.googleapis.com/auth/youtube.readonly']
+
+def get_flow():
+    client_config = {
+        "web": {
+            "client_id": st.secrets["google_oauth"]["client_id"],
+            "client_secret": st.secrets["google_oauth"]["client_secret"],
+            "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+            "token_uri": "https://oauth2.googleapis.com/token",
+            "redirect_uris": [st.secrets["google_oauth"]["redirect_uri"]]
+        }
+    }
+    flow = Flow.from_client_config(
+        client_config,
+        scopes=SCOPES,
+        redirect_uri=st.secrets["google_oauth"]["redirect_uri"]
+    )
+    return flow
+
+# Check if we're returning from Google's login
+query_params = st.query_params
+
+if "code" in query_params and "credentials" not in st.session_state:
+    flow = get_flow()
+    flow.fetch_token(code=query_params["code"])
+    st.session_state["credentials"] = flow.credentials
+    st.query_params.clear()
+    st.rerun()
+
+# Login button
+st.markdown("---")
+if "credentials" not in st.session_state:
+    flow = get_flow()
+    auth_url, _ = flow.authorization_url(prompt='consent')
+    st.markdown(f"[🔗 Connect YouTube Account]({auth_url})")
+else:
+    st.success("✅ YouTube Connected!")
+
 
 # ---------- STYLING ----------
 st.markdown("""
