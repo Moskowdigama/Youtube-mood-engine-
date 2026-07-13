@@ -245,16 +245,6 @@ st.markdown("""
     </div>
 """, unsafe_allow_html=True)
 
-for _, row in top_songs.iterrows():
-    st.markdown(f"""
-        <div class="list-row">
-            <div style="flex: 1;">
-                <div class="list-title">{row['Track']}</div>
-                <div class="list-subtitle">{row['Artist']} · {row['Genre']}</div>
-            </div>
-            <div class="list-score">🔥 {row['Popularity']}</div>
-        </div>
-    """, unsafe_allow_html=True)
 
 # ---------- LOAD DATA ----------
 df = pickle.load(open('songs.pkl', 'rb'))
@@ -364,12 +354,14 @@ if st.button("🎶 run it back", use_container_width=True):
         else:
             st.markdown("### your playlist rn 🎧")
             for _, row in top_songs.iterrows():
-                st.markdown(f"""
-                    <div class="song-card">
-                        <div class="song-title">{row['Track']}</div>
-                        <div class="song-artist">{row['Artist']}</div>
-                        <div class="song-meta">{row['Genre']} • 🔥 {row['Popularity']}</div>
-                    </div>
-                """, unsafe_allow_html=True)
+    st.markdown(f"""
+        <div class="list-row">
+            <div style="flex: 1;">
+                <div class="list-title">{row['Track']}</div>
+                <div class="list-subtitle">{row['Artist']} · {row['Genre']}</div>
+            </div>
+            <div class="list-score">🔥 {row['Popularity']}</div>
+        </div>
+    """, unsafe_allow_html=True)
     else:
         st.warning("pick a mood or drop some emojis first fr")
