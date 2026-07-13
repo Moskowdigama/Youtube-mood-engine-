@@ -76,12 +76,6 @@ if "code" in query_params and "credentials" not in st.session_state:
         st.error(f"Login failed: {token_response}")
 
 # Login button
-st.markdown("---")
-if "credentials" not in st.session_state:
-    auth_url = get_auth_url()
-    st.markdown(f"[🔗 Connect YouTube Account]({auth_url})")
-else:
-    st.success("✅ YouTube Connected!")
 
 #new code here 
 def get_liked_videos(access_token):
